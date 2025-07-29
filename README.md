@@ -1,21 +1,22 @@
+
 # 📦 Inventory Management System – Backend API
 
-This project is a backend RESTful API for managing products and user authentication in an inventory system. Built with **Node.js**, **Express**, and **MongoDB**.
+A backend RESTful API for managing products and user authentication in an inventory system. Built with **Node.js**, **Express**, **MongoDB**, and **Docker**.
 
 ---
 
 ## 🚀 Tech Stack
 
-- Node.js
-- Express.js
+- Node.js + Express.js
 - MongoDB + Mongoose
 - JWT Authentication
-- Swagger for API Documentation
+- Swagger for API Docs
+- Docker & Docker Compose
 - Postman for testing
 
 ---
 
-## ⚙️ Setup Instructions
+## ⚙️ Setup Instructions (Without Docker)
 
 ### 📁 1. Clone the Repository
 
@@ -32,38 +33,47 @@ npm install
 
 ### 🔑 3. Create `.env` File
 
-In the root directory, create a `.env` file with the following contents:
-
 ```
 PORT=5000
 MONGO_URI=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/inventory_db
 JWT_SECRET=your_jwt_secret_key
 ```
 
-> Replace `<username>`, `<password>`, and `<cluster>` with your MongoDB Atlas credentials.
-
 ---
 
-## 🧪 Running the Server
+## 🐳 Docker Setup
+
+### 🛠️ 1. Build and Run Containers
+
+From the root of your project (where `docker-compose.yml` is):
 
 ```bash
-npm start
+docker-compose up --build
 ```
 
-Server will run at:  
-📍 `http://localhost:5000`
+### 🔗 Access the App
+
+- Backend API: [http://localhost:5000](http://localhost:5000)
+- Swagger UI: [http://localhost:5000/api-docs](http://localhost:5000/api-docs)
+
+> If you want Swagger on root (`/`), it can be mapped in `server.js` (see below).
 
 ---
 
-## 🔐 Authentication
+## 🔐 Authentication Endpoints
 
-- `POST /api/signup` — Register a user
-- `POST /api/login` — Login with username and password  
-  ✅ Returns a JWT token to use in Authorization headers for protected routes.
+- `POST /api/signup` — Register a user  
+- `POST /api/login` — Login & get JWT  
+
+> Use the token in the `Authorization` header for all protected routes:
+
+```
+Authorization: Bearer <your_jwt_token>
+```
 
 ---
 
-## 📦 Products API (Protected)
+## 📦 Product Routes (Protected)
 
 | Method | Endpoint                          | Description                 |
 |--------|-----------------------------------|-----------------------------|
@@ -71,32 +81,21 @@ Server will run at:
 | PUT    | `/api/products/:id/quantity`      | Update product quantity     |
 | GET    | `/api/products?page=1`            | Get paginated product list |
 
-> Add this header for all protected routes:
-```
-Authorization: Bearer <your_jwt_token>
+---
+
+## 📘 API Documentation (Swagger)
+
+- **URL**: [http://localhost:5000/api-docs](http://localhost:5000/api-docs)
+
+> To move Swagger UI to root (`/`), update `server.js`:
+
+```js
+app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 ```
 
 ---
 
-## 📮 API Documentation (Swagger)
-
-Swagger UI is available at:
-
-📍 `http://localhost:5000/api-docs`
-
-Includes detailed OpenAPI documentation and test forms.
-
----
-
-## 🧪 Automated API Testing (Optional)
-
-A Python script is provided to test the entire API flow.
-
-### Prerequisites:
-- Python 3.6+
-- `requests` library
-
-### Run:
+## 🧪 API Testing with Python
 
 ```bash
 pip install requests
@@ -105,40 +104,44 @@ python test_api.py
 
 ---
 
-## 🔬 Postman Collection
+## 📮 Postman Collection
 
-A Postman collection (`inventory-management-collection.postman_collection.json`) is included to test:
-
-- Signup
-- Login
-- Add Product
-- Update Quantity
-- Get Products
-
-You can import it directly into Postman.
+Import the included `inventory-management-collection.postman_collection.json` into Postman for quick testing.
 
 ---
 
-## 📁 Project Structure
+## 🗂 Project Structure
 
 ```
 inventory-backend/
 │
-├── controllers/        # Business logic
-├── models/             # Mongoose schemas
-├── routes/             # Express routes
-├── middleware/         # JWT auth middleware
-├── config/             # DB config
-├── swagger.js          # Swagger/OpenAPI config
-├── test_api.py         # Python test script
-├── .env                # Environment variables
-├── README.md           # Setup docs
-├── server.js           # Entry point
+├── controllers/         # Route handlers
+├── routes/              # API routes
+├── models/              # Mongoose schemas
+├── config/              # DB connection
+├── middleware/          # Auth middleware
+├── swagger.js           # Swagger setup
+├── server.js            # Entry point
+├── Dockerfile           # Docker build config
+├── docker-compose.yml   # Container orchestration
+├── .env                 # Environment variables
+└── README.md            # Docs
 ```
+
+---
+
+## 🐙 Sharing the Dockerized Project
+
+Just share your GitHub repo link.
+
+> Ensure it contains:
+- `Dockerfile` in root
+- `docker-compose.yml`
+- All code and `.env.example` (without secrets)
 
 ---
 
 ## ✨ Author
 
-Made with 💻 by Gaurav Jaiswal
-For the Fi Internship Backend Assignment.
+Built by **Gaurav Jaiswal**  
+For the **Fi Internship Backend Assignment**
